@@ -42,8 +42,9 @@ mingw32-make -f Makefile.dist mingw32-clean
 mingw32-make -f Makefile.dist mingw32 -j
 
 mkdir bin
-move /y lib\*.dll bin
-move /y lib\*.a bin
+move /y lib\libcurl.dll bin\curl-impersonate-chrome.dll
+move /y lib\libcurl.a bin\curl-impersonate-chrome.a
+move /y lib\libcurldll.a bin\curl-impersonate-chrome.dll.a
 move /y src\*.exe bin
 bin\curl.exe -V
 

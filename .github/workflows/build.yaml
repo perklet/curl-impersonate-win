@@ -40,7 +40,7 @@ jobs:
         run: ./build.bat
       - uses: ilammy/msvc-dev-cmd@v1
       - name: Generate lib files
-        run: ./dll2lib.bat 64 curl\bin\libcurl.dll
+        run: ./dll2lib.bat 64 curl\bin\curl-impersonate-chrome.dll
       - name: Build tarball
         shell: msys2 {0}
         run: tar cvzf curl-impersonate-win.tar.gz -C curl/bin .
