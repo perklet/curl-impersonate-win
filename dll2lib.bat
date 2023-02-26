@@ -6,7 +6,7 @@ REM Currently must run without path on DLL.
 REM (Fix by removing path when of lib_name for LIBRARY line below?)
 REM
 REM Requires 'dumpbin' and 'lib' in PATH - run from VS developer prompt.
-REM·
+REM
 REM Script inspired by http://stackoverflow.com/questions/9946322/how-to-generate-an-import-library-lib-file-from-a-dll
 SETLOCAL
 if "%1"=="32" (set machine=x86) else (set machine=x64)
