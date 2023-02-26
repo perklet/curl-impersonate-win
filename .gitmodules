@@ -4,3 +4,6 @@
 [submodule "boringssl_original"]
 	path = boringssl_original
 	url = https://github.com/google/boringssl.git
+[submodule "curl-impersonate"]
+	path = curl-impersonate
+	url = https://github.com/lwthiker/curl-impersonate.git
