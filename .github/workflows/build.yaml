@@ -38,7 +38,13 @@ jobs:
       - name: Build
         shell: msys2 {0}
         run: ./build.bat
+      - name: Generate lib files
+        shell: msys2 {0}
+        run: ./dll2lib.bat 64 curl/bin/libcurl.dll
+      - name: Build tarball
+        shell: msys2 {0}
+        run: tar cvzf curl-impersonate-win.tar.gz -C curl/bin .
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ./curl/bin/*
+          files: curl-impersonate-win.tar.gz
