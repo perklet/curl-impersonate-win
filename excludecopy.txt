@@ -1,4 +1,0 @@
-.git
-.gitignore
-.gitattribute
-.git-blame-ignore-revs
