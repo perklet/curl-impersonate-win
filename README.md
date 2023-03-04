@@ -13,7 +13,7 @@ Current version based on:
 MSYS2 is needed to build binaries. Steps:
 1. Download and install MSYS2 (https://www.msys2.org/) into folder `c:\msys64\`
 2. Run MSYS2 from start menu and update packages with command: `pacman -Suy`
-3. Install additional packages: `pacman -S patch mingw-w64-x86_64-make mingw-w64-x86_64-cmake mingw-w64-x86_64-nasm mingw-w64-x86_64-gcc mingw-w64-x86_64-go`
+3. Install additional packages: `pacman -S patch unzip mingw-w64-x86_64-autotools ingw-w64-x86_64-make mingw-w64-x86_64-cmake mingw-w64-x86_64-nasm mingw-w64-x86_64-gcc mingw-w64-x86_64-go`
 
 # Build
 1. Clone this repository with --recursive attribute to get BoringSSL and Curl submodules.

@@ -1,3 +1,4 @@
 boringssl/*
 curl/*
 _deps/*
+dist/*

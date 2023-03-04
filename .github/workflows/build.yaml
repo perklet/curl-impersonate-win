@@ -1,6 +1,9 @@
 name: build
 on:
   push:
+    branches:
+      - master
+      - main
     tags:
       - "*"
 jobs:
@@ -32,19 +35,17 @@ jobs:
             mingw-w64-x86_64-go
       - name: Copy and patch
         shell: msys2 {0}
-        run: ./copy_and_patch.bat
+        run: ./build.sh
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
-      - name: Build
-        shell: msys2 {0}
-        run: ./build.bat
       - uses: ilammy/msvc-dev-cmd@v1
       - name: Generate lib files
-        run: ./dll2lib.bat 64 curl\bin\curl-impersonate-chrome.dll
+        run: ./dll2lib.bat 64 dist\libcurl.dll
       - name: Build tarball
         shell: msys2 {0}
-        run: tar cvzf curl-impersonate-win.tar.gz -C curl/bin .
+        run: tar cvzf curl-impersonate-chrome.tar.gz -C dist .
       - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
-          files: curl-impersonate-win.tar.gz
+          files: curl-impersonate-chrome.tar.gz

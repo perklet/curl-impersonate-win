@@ -3,9 +3,12 @@
 # rsync -av --exclude .git boringssl_original boringssl
 # rsync -av --exclude .git curl_original curl
 
+set -x
+
 cd boringssl
 
-# rm -rf lib
+rm -rf lib
+git checkout -- .
 patchfile=../curl-impersonate/chrome/patches/boringssl-old-ciphers.patch
 patch -p1 < $patchfile
 sed -i 's/-ggdb//g' CMakeLists.txt
@@ -15,7 +18,8 @@ cd ..
 
 cd curl
 
-# rm -rf lib
+git checkout -- .
+git clean -f
 patchfile=../curl-impersonate/chrome/patches/curl-impersonate.patch
 patch -p1 < $patchfile
 
@@ -31,6 +35,7 @@ sed -i 's/-lidn2/-lidn2 -lunistring -liconv/g' src/Makefile.m32
 cd ..
 
 cd boringssl
+
 rm -rf lib
 cmake -G "Ninja" -S . -B lib -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc.exe
 ninja -C lib crypto ssl
@@ -52,16 +57,16 @@ export NGHTTP2_PATH=nghttp2_stub
 export IDN2=1
 export LIBIDN2_PATH=idn2_stub
 export SSL=1
-export OPENSSL_PATH=./boringssl
-export OPENSSL_LIBPATH=./boringssl/lib
+export OPENSSL_PATH=$PWD/boringssl
+export OPENSSL_LIBPATH=$PWD/boringssl/lib
 export OPENSSL_LIBS='-lssl -lcrypto'
 
 cd curl
 mingw32-make -f Makefile.dist mingw32-clean
 mingw32-make -f Makefile.dist mingw32 -j
 
-mkdir dist
-mv lib/* dist/
-mv src/*.exe dist/
+mkdir -p ../dist
+mv lib/libcurl* ../dist/
+mv src/*.exe ../dist/
 
 dist/curl -V
