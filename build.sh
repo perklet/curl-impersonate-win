@@ -69,4 +69,5 @@ mkdir -p ../dist
 mv lib/libcurl* ../dist/
 mv src/*.exe ../dist/
 
+cd ..
 dist/curl -V
