@@ -34,8 +34,8 @@ jobs:
             mingw-w64-x86_64-nasm
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-go
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
       - name: Copy and patch
         shell: msys2 {0}
         run: ./build.sh

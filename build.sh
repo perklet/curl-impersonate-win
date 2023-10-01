@@ -60,10 +60,12 @@ export SSL=1
 export OPENSSL_PATH=$PWD/boringssl
 export OPENSSL_LIBPATH=$PWD/boringssl/lib
 export OPENSSL_LIBS='-lssl -lcrypto'
+export HTTP2=1
+export WEBSOCKETS=1
 
 cd curl
-mingw32-make -f Makefile.dist mingw32-clean
-mingw32-make -f Makefile.dist mingw32 -j
+mingw32-make -f Makefile.dist mingw32-clean CFLAGS=-Wno-unused-variable
+mingw32-make -f Makefile.dist mingw32 -j CFLAGS=-Wno-unused-variable
 
 mkdir -p ../dist
 mv lib/libcurl* ../dist/
