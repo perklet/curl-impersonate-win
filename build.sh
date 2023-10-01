@@ -3,7 +3,7 @@
 # rsync -av --exclude .git boringssl_original boringssl
 # rsync -av --exclude .git curl_original curl
 
-set -x
+set -ex
 
 cd boringssl
 
@@ -23,14 +23,14 @@ git clean -f
 patchfile=../curl-impersonate/chrome/patches/curl-impersonate.patch
 patch -p1 < $patchfile
 
-sed -i 's/-shared/-s -static -shared/g' lib/Makefile.m32
-sed -i 's/-static/-s -static/g' src/Makefile.m32
+sed -i 's/-shared/-s -static -shared/g' lib/Makefile.mk
+sed -i 's/-static/-s -static/g' src/Makefile.mk
 
-sed -i 's/-DUSE_NGHTTP2/-DUSE_NGHTTP2 -DNGHTTP2_STATICLIB/g' lib/Makefile.m32
-sed -i 's/-DUSE_NGHTTP2/-DUSE_NGHTTP2 -DNGHTTP2_STATICLIB/g' src/Makefile.m32
+sed -i 's/-DUSE_NGHTTP2/-DUSE_NGHTTP2 -DNGHTTP2_STATICLIB/g' lib/Makefile.mk
+sed -i 's/-DUSE_NGHTTP2/-DUSE_NGHTTP2 -DNGHTTP2_STATICLIB/g' src/Makefile.mk
 
-sed -i 's/-lidn2/-lidn2 -lunistring -liconv/g' lib/Makefile.m32
-sed -i 's/-lidn2/-lidn2 -lunistring -liconv/g' src/Makefile.m32
+sed -i 's/-lidn2/-lidn2 -lunistring -liconv/g' lib/Makefile.mk
+sed -i 's/-lidn2/-lidn2 -lunistring -liconv/g' src/Makefile.mk
 
 cd ..
 
