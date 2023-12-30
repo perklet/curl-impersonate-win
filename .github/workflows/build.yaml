@@ -4,6 +4,7 @@ on:
     branches:
       - master
       - main
+      - reproduce*
     tags:
       - "*"
 jobs:
@@ -14,7 +15,7 @@ jobs:
     runs-on: windows-2019
     steps:
       - name: configure Pagefile
-        uses: al-cheb/configure-pagefile-action@v1.3
+        uses: al-cheb/configure-pagefile-action@v1.2
         with:
           minimum-size: 16GB
           maximum-size: 16GB
@@ -27,18 +28,17 @@ jobs:
         with:
           update: true
           install: >-
-            git
             patch
             mingw-w64-x86_64-make
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-nasm
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-go
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
       - name: Copy and patch
         shell: msys2 {0}
         run: ./build.sh
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
       - uses: ilammy/msvc-dev-cmd@v1
       - name: Generate lib files
         run: ./dll2lib.bat 64 dist\libcurl.dll

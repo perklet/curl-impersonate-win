@@ -1,7 +1,9 @@
 #!/bin/bash
 
+# rsync -av --exclude .git boringssl_original boringssl
+# rsync -av --exclude .git curl_original curl
 
-set -ex
+set -x
 
 cd boringssl
 
@@ -11,6 +13,28 @@ patchfile=../curl-impersonate/chrome/patches/boringssl-old-ciphers.patch
 patch -p1 < $patchfile
 sed -i 's/-ggdb//g' CMakeLists.txt
 sed -i 's/-Werror//g' CMakeLists.txt
+
+cd ..
+
+cd curl
+
+git checkout -- .
+git clean -f
+patchfile=../curl-impersonate/chrome/patches/curl-impersonate.patch
+patch -p1 < $patchfile
+
+sed -i 's/-shared/-s -static -shared/g' lib/Makefile.m32
+sed -i 's/-static/-s -static/g' src/Makefile.m32
+
+sed -i 's/-DUSE_NGHTTP2/-DUSE_NGHTTP2 -DNGHTTP2_STATICLIB/g' lib/Makefile.m32
+sed -i 's/-DUSE_NGHTTP2/-DUSE_NGHTTP2 -DNGHTTP2_STATICLIB/g' src/Makefile.m32
+
+sed -i 's/-lidn2/-lidn2 -lunistring -liconv/g' lib/Makefile.m32
+sed -i 's/-lidn2/-lidn2 -lunistring -liconv/g' src/Makefile.m32
+
+cd ..
+
+cd boringssl
 
 rm -rf lib
 cmake -G "Ninja" -S . -B lib -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc.exe
@@ -36,29 +60,10 @@ export SSL=1
 export OPENSSL_PATH=$PWD/boringssl
 export OPENSSL_LIBPATH=$PWD/boringssl/lib
 export OPENSSL_LIBS='-lssl -lcrypto'
-export HTTP2=1
-export WEBSOCKETS=1
-export ECH=1
-
 
 cd curl
-
-git checkout -- .
-git clean -f
-patchfile=../curl-impersonate/chrome/patches/curl-impersonate.patch
-patch -p1 < $patchfile
-
-sed -i 's/-shared/-s -static -shared/g' lib/Makefile.mk
-sed -i 's/-static/-s -static/g' src/Makefile.mk
-
-sed -i 's/-DUSE_NGHTTP2/-DUSE_NGHTTP2 -DNGHTTP2_STATICLIB/g' lib/Makefile.mk
-sed -i 's/-DUSE_NGHTTP2/-DUSE_NGHTTP2 -DNGHTTP2_STATICLIB/g' src/Makefile.mk
-
-sed -i 's/-lidn2/-lidn2 -lunistring -liconv/g' lib/Makefile.mk
-sed -i 's/-lidn2/-lidn2 -lunistring -liconv/g' src/Makefile.mk
-
-mingw32-make -f Makefile.dist mingw32-clean CFLAGS=-Wno-unused-variable
-mingw32-make -f Makefile.dist mingw32 -j CFLAGS=-Wno-unused-variable
+mingw32-make -f Makefile.dist mingw32-clean
+mingw32-make -f Makefile.dist mingw32 -j
 
 mkdir -p ../dist
 mv lib/libcurl* ../dist/
